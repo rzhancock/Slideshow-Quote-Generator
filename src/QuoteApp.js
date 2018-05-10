@@ -41,7 +41,7 @@ export default class QuoteApp extends Component {
 
     componentDidMount(){
 
-       let xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
 
         xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=mountain,forest&orientation=landscape&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
@@ -50,11 +50,9 @@ export default class QuoteApp extends Component {
             this.setState({
                 images: JSON.parse(xhr.responseText)
             });
-
            
         }
 
-        
         xhr.send();
         console.log('READYSTATE: ', xhr.readyState);
     }
