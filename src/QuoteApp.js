@@ -59,18 +59,18 @@ export default class QuoteApp extends Component {
 
 
     nextIndex = () => {
-        const { quoteIndex, /*imageIndex, images,*/ quotes } = this.state;
+        const { quoteIndex, imageIndex, images, quotes } = this.state;
         const numberOfQuotes = quotes.length - 1;
-        //const numberOfImages = images.length - 1;
+        const numberOfImages = this.state.images.results.length - 1;
         const newIndex = Math.round(Math.random() * numberOfQuotes);
-        //const newImage = Math.round(Math.random() * numberOfImages);
+        const newImage = Math.round(Math.random() * numberOfImages);
 
         if (newIndex === quoteIndex) {
             return this.nextIndex();
         }
         this.setState({
             quoteIndex: newIndex,
-            //imageIndex: newImage
+            imageIndex: newImage
         });
     }
 
@@ -79,7 +79,7 @@ export default class QuoteApp extends Component {
         
            
         return (
-            <div className="App">
+            <div className="App" /*style={{imageBackground: "url(" + this.state.images.images.results[this.state.imageIndex].urls.full + "')'"}}*/>
                 
                 <div className="quote-container">
                     <div className="quote">
