@@ -52,21 +52,21 @@ export default class QuoteApp extends Component {
 
     }
 
-    componentDidUpdate() {
+   /* componentDidUpdate() {
         
 
          
 
-       /* renderBackground = () =>{
+        renderBackground = () =>{
 
             const { imageIndex, images } = this.state;
             const location = images.results[imageIndex].urls.full;
             background = 'backgroundImage: url(' + location + ')';
-            console.log(background)
+            console.log(background);
             return background;
-        } */
+        } 
 
-    } 
+    } */
 
 
     nextIndex = () => {
@@ -89,15 +89,15 @@ export default class QuoteApp extends Component {
 
 
     render() {
-        const { imageIndex, images } = this.state;
+      /*  const { imageIndex, images } = this.state;
         let img = images.results[imageIndex].urls.full;
         console.log(img);
         
        let styles = {
             background: {
-                //backgroundImage: 'url(' + img + ')',
+                backgroundImage: 'url(' + img + ')',
                 }
-        };
+        }; */
            
         return (
 
