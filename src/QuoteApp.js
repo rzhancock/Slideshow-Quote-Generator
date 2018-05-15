@@ -9,10 +9,10 @@ export default class QuoteApp extends Component {
         this.state = {
             quotes: favoriteQuotes,
             quoteIndex: 0,
-            images: {
-                results: [],
-            },
-            imageIndex: 0
+            images: {},
+            imageIndex: 0,
+            URL: ''
+
         }
         
     }
@@ -39,12 +39,20 @@ export default class QuoteApp extends Component {
 
         xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=mountain,forest&orientation=landscape&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
+        function updateURL() {
+               this.setState(
+                    { URL: this.state.images.results[this.state.imageIndex].urls.full }
+                ); 
+            }
+
         xhr.onload = () => {
             
 
             this.setState({
-                images: JSON.parse(xhr.responseText)
-            });
+                images: JSON.parse(xhr.responseText),
+            }, updateURL);
+
+            
            
         }
 
@@ -89,20 +97,23 @@ export default class QuoteApp extends Component {
 
 
     render() {
-      /*  const { imageIndex, images } = this.state;
-        let img = images.results[imageIndex].urls.full;
-        console.log(img);
+     
         
        let styles = {
             background: {
-                backgroundImage: 'url(' + img + ')',
-                }
-        }; */
+                backgroundImage: 'url(' + this.state.URL + ')',
+                backgroundSize: '100%, 100%',
+                width: 'auto',
+                height: '100%'
+            }
+        };
+
+        console.log(this.state.URL);
            
         return (
 
 
-            <div className="App" >
+            <div className="App" style={styles.background}>
                 
                 <div className="quote-container">
                     <div className="quote">
