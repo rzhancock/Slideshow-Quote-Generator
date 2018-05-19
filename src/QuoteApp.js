@@ -102,9 +102,6 @@ export default class QuoteApp extends Component {
        let styles = {
             background: {
                 backgroundImage: 'url(' + this.state.URL + ')',
-                backgroundSize: '100%, 100%',
-                width: 'auto',
-                height: '100%'
             }
         };
 
