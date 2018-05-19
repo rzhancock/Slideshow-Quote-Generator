@@ -31,26 +31,27 @@ export default class QuoteApp extends Component {
         return '- ' + quotes[quoteIndex].author;
     }
 
+    updateURL = () => {
+             this.setState(
+                    { URL: this.state.images.results[this.state.imageIndex].urls.full }
+            ); 
+     }
     
 
     componentDidMount(){
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=mountain,forest&orientation=landscape&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=mountain,forest,trees,animals&orientation=landscape&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
-        function updateURL() {
-               this.setState(
-                    { URL: this.state.images.results[this.state.imageIndex].urls.full }
-                ); 
-            }
+        
 
         xhr.onload = () => {
             
 
             this.setState({
                 images: JSON.parse(xhr.responseText),
-            }, updateURL);
+            }, this.updateURL);
 
             
            
@@ -90,7 +91,7 @@ export default class QuoteApp extends Component {
         this.setState({
             quoteIndex: newIndex,
             imageIndex: newImage
-        });
+        },this.updateURL);
     }
 
 

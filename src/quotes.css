@@ -1,13 +1,16 @@
 .App {
   background: center;
   display: flex;
-  justify-content: center;
-  height: auto;
+  flex-direction: row;
   max-width: 1200px;
+  align-items: center;
 }
 .quote-container {
+  margin: 0 auto;
   display: flex;
-  align-items: center;
+  align-self: center;
+  height: 600px;
+  justify-content: center;
 }
 .quote {
   align-self: center;
