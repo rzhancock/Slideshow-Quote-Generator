@@ -33,7 +33,7 @@ export default class QuoteApp extends Component {
 
     updateURL = () => {
              this.setState(
-                    { URL: this.state.images.results[this.state.imageIndex].urls.full }
+                    { URL: this.state.images.results[this.state.imageIndex].urls.regular }
             ); 
      }
     
@@ -42,7 +42,7 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=mountain,forest,trees,animals&orientation=landscape&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=mountain,forest,trees,animals&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
         
 
@@ -102,7 +102,7 @@ export default class QuoteApp extends Component {
         
        let styles = {
             background: {
-                backgroundImage: 'url(' + this.state.URL + ')',
+                background: 'url(' + this.state.URL + ') no-repeat',
             }
         };
 
@@ -121,18 +121,21 @@ export default class QuoteApp extends Component {
                     <div className="author">
                         {this.renderAuthor()}
                     </div>
-                </div>
-                
 
+                </div>
                 <div>
                     <button 
                         className="next-index"
                         onClick={this.nextIndex}
                     >
                         Another!
+
                     </button>
                 </div>
             </div>
+                
+
+                
             
         );
 
