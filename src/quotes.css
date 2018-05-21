@@ -1,5 +1,6 @@
 .App {
   display: flex;
+  flex-direction: column;
   padding: 0;
   max-width: 1200px;
   width: 100%;
@@ -14,7 +15,9 @@
   align-items: center;
   text-align: center;
 }
-.quote {
+.quote,
+.author {
   align-self: center;
-  padding: 3em;
+  padding: 2em;
+  color: white;
 }
