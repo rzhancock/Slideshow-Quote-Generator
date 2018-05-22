@@ -1,12 +1,15 @@
 .App {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   padding: 0;
   max-width: 1200px;
   width: 100%;
-  height: auto;
+  height: 80%;
 }
 .quote-container {
+  grid-column: -1;
+  grid-row: 0.5;
   padding: 12em 4em;
   display: flex;
   flex-direction: column;
