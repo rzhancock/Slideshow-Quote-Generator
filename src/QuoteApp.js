@@ -33,7 +33,7 @@ export default class QuoteApp extends Component {
 
     updateURL = () => {
              this.setState(
-                    { URL: this.state.images.results[this.state.imageIndex].urls.regular }
+                    { URL: this.state.images.results[this.state.imageIndex].urls.custom }
             ); 
      }
     
@@ -42,7 +42,7 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&query=space,stars,planets,dark,beautiful,forest,trees&orientation=landscape&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&w=900&h=900&fit=crop&query=space,stars,planets,dark,beautiful,forest,trees&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
         
 
