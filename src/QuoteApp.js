@@ -42,7 +42,7 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=clamp&h=800&w=1000&bg=125987&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=clamp&h=600&w=900&bg=125987&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
         
 
@@ -112,7 +112,6 @@ export default class QuoteApp extends Component {
 
 
             <div className="App" >
-                
                 <div className="quote-container" style={styles.background}>
                     <div className="quote">
                         {this.renderQuote()}
@@ -123,7 +122,7 @@ export default class QuoteApp extends Component {
                     </div>
 
                 </div>
-                <div>
+                <div className="next">
                     <button 
                         className="next-index"
                         onClick={this.nextIndex}
