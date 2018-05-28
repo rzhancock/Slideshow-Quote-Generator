@@ -1,4 +1,7 @@
 export const favoriteQuotes = [{
+    author: "Epictetus",
+    text: "He who laughs at himself never runs out of things to laugh at."
+}, {
     author: "Daniel Kahneman",
     text: "We're blind to our blindness. We have very little idea of how little we know. We're not designed to know how little we know."
 }, {
@@ -76,9 +79,6 @@ export const favoriteQuotes = [{
 }, {
     author: "Epictetus",
     text: "If you want to improve, be content to be thought foolish and stupid."
-}, {
-    author: "Epictetus",
-    text: "He who laughs at himself never runs out of things to laugh at."
 }, {
     author: "Epictetus",
     text: "Freedom is the only worthy goal in life. It is won by disregarding things that lie beyond our control."
@@ -173,7 +173,7 @@ export const favoriteQuotes = [{
     author: "Søren Kierkegaard",
     text: "The most common form of despair is not being who you are."
 }, {
-    author: "Søren Kierkegaard,
+    author: "Søren Kierkegaard",
     text: "To dare is to lose one's footing momentarily. Not to dare is to lose oneself."
 }, {
     author: "Søren Kierkegaard",
@@ -205,28 +205,28 @@ export const favoriteQuotes = [{
 }, {
     author: "Angela Duckworth",
     text: "At its core, the idea of purpose is the idea that what we do matters to people other than ourselves."
-},{
+}, {
     author: "Angela Duckworth",
     text: "As much as talent counts, effort counts twice."
-}{
+}, {
     author: "Atul Gawande",
     text: "Better is possible. It does not take genius. It takes diligence. It takes moral clarity. It takes ingenuity. And above all, it takes a willingness to try."
-}{
+}, {
     author: "Atul Gawande",
     text: "How we seek to spend our time may depend on how much time we perceive ourselves to have."
-}{
+}, {
     author: "Atul Gawande",
     text: "Courage is strength in the face of knowledge of what is to be feared or hoped. Wisdom is prudent strength."
-}{
+}, {
     author: "Atul Gawande",
     text: "Life is choices, and they are relentless. No sooner have you made one choice than another is upon you."
-}{
+}, {
     author: "Atul Gawande",
     text: "We recruit for attitude and train for skill."
-}{
+}, {
     author: "Robert M. Sapolsky",
     text: "We live well enough to have the luxury to get ourselves sick with purely social, psychological stress."
-}{
+}, {
     author: "Robert M. Sapolsky",
     text: "You don’t have to choose between being scientific and being compassionate."
 }];

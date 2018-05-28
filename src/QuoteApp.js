@@ -33,7 +33,7 @@ export default class QuoteApp extends Component {
 
     updateURL = () => {
              this.setState(
-                    { URL: this.state.images.results[this.state.imageIndex].urls.custom }
+                    { URL: this.state.images[this.state.imageIndex].urls.regular }
             ); 
      }
     
@@ -42,7 +42,7 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/search/photos?page=1&per_page=25&w=900&h=900&fit=crop&query=space,stars,planets,dark,beautiful,forest,trees&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=clamp&h=800&w=1000&bg=125987&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
         
 
@@ -69,7 +69,7 @@ export default class QuoteApp extends Component {
         renderBackground = () =>{
 
             const { imageIndex, images } = this.state;
-            const location = images.results[imageIndex].urls.full;
+            const location = images[imageIndex].urls.full;
             background = 'backgroundImage: url(' + location + ')';
             console.log(background);
             return background;
@@ -81,7 +81,7 @@ export default class QuoteApp extends Component {
     nextIndex = () => {
         const { quoteIndex, imageIndex, images, quotes } = this.state;
         const numberOfQuotes = quotes.length - 1;
-        const numberOfImages = images.results.length - 1;
+        const numberOfImages = images.length - 1;
         const newIndex = Math.round(Math.random() * numberOfQuotes);
         const newImage = Math.round(Math.random() * numberOfImages);
 
@@ -105,15 +105,15 @@ export default class QuoteApp extends Component {
                 background: 'url(' + this.state.URL + ') no-repeat',
             }
         };
-
-        console.log(this.state.URL);
+        console.log(this.state.images);
+    
            
         return (
 
 
-            <div className="App" style={styles.background}>
+            <div className="App" >
                 
-                <div className="quote-container">
+                <div className="quote-container" style={styles.background}>
                     <div className="quote">
                         {this.renderQuote()}
                     </div>
