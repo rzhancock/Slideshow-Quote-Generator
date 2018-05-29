@@ -22,13 +22,13 @@ export default class QuoteApp extends Component {
     renderQuote = () => {
         const { quoteIndex, quotes } = this.state;
         
-        return '"' + quotes[quoteIndex].text + '"';
+        return quotes[quoteIndex].text;
     }
 
     renderAuthor = () => {
         const { quoteIndex, quotes } = this.state;
                
-        return '- ' + quotes[quoteIndex].author;
+        return quotes[quoteIndex].author;
     }
 
     updateURL = () => {
@@ -42,7 +42,7 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=clamp&h=600&w=900&bg=125987&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
         
 
@@ -104,9 +104,7 @@ export default class QuoteApp extends Component {
             background: {
                 background: 'url(' + this.state.URL + ') no-repeat',
             }
-        };
-        console.log(this.state.images);
-    
+        };    
            
         return (
 
@@ -124,10 +122,11 @@ export default class QuoteApp extends Component {
                 </div>
                 <div className="next">
                     <button 
-                        className="next-index"
+                        className="next-btn"
                         onClick={this.nextIndex}
                     >
-                        Another!
+                        Next<br/>
+                        Quote
 
                     </button>
                 </div>
