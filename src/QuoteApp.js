@@ -110,6 +110,16 @@ export default class QuoteApp extends Component {
 
 
             <div className="App" >
+                <div className="previous">
+                    <button 
+                        className="prev-btn"
+                        onClick={null}
+                    >
+                        Prev<br/>
+                        Quote
+
+                    </button>
+                </div>
                 <div className="quote-container" style={styles.background}>
                     <div className="quote">
                         {this.renderQuote()}
@@ -129,6 +139,7 @@ export default class QuoteApp extends Component {
                         Quote
 
                     </button>
+                
                 </div>
             </div>
                 

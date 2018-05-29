@@ -33,7 +33,7 @@ export const favoriteQuotes = [{
     text: "The best revenge is to be unlike him who performed the injury."
 }, {
     author: "Marcus Aurelius",
-    text: "How much more grievous are the consequences of anger than the causes of it.."
+    text: "How much more grievous are the consequences of anger than the causes of it."
 }, {
     author: "Marcus Aurelius",
     text: "Receive without conceit, release without struggle."
@@ -48,7 +48,7 @@ export const favoriteQuotes = [{
     text: "Be tolerant with others and strict with yourself."
 }, {
     author: "Seneca",
-    text: "We are more often frightened than hurt; and we suffer more in imagination than in reality.."
+    text: "We are more often frightened than hurt; and we suffer more in imagination than in reality."
 }, {
     author: "Seneca",
     text: "If a man knows not which port he sails, no wind is favorable."
@@ -163,9 +163,6 @@ export const favoriteQuotes = [{
 }, {
     author: "Isaac Asimov",
     text: "Self-education is, I firmly believe, the only kind of education there is."
-}, {
-    author: "Isaac Asimov",
-    text: "I do not fear computers. I fear the lack of them."
 }, {
     author: "Cato",
     text: "I begin to speak only when I’m certain what I’ll say isn’t better left unsaid."
