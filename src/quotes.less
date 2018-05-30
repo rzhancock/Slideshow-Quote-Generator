@@ -1,5 +1,6 @@
 @font: sans-serif;
 @shadow: 0 0 8px #000;
+@bg-color: #26639d;
 
 .App {
 	padding: 0;
@@ -8,10 +9,10 @@
 	grid-template-columns: 60px auto 60px;
 	max-width: 1200px;
 	margin: 0 auto;
+
 }
 
 .quote-container {
-	padding: 0;
 	display: grid;
 	grid-column: 2 / span 1;
 	grid-row: 2 / span 1;
@@ -20,7 +21,7 @@
 	text-align: center;
 	align-content: center;
 	justify-items: center; 
-
+	border: none;
 }
 
 .quote, {
@@ -42,6 +43,29 @@
 
 }
 
+.top-row {
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	background: @bg-color;
+	width: 100%;
+	height: 100%;
+	border: none;	
+}
+
+.bottom-row {
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 3;
+	grid-row-end: 4;
+	background: @bg-color;
+	width: 100%;
+	height: 100%;
+	border: none;	
+}
+
+
 .next {
 	padding:0;
 	grid-column-start: 3;
@@ -51,14 +75,12 @@
 }
 
 .next-btn {
-	background: lightblue;
+	background: @bg-color;
 	cursor: pointer;
 	width: 100%;
 	height: 100%;
 	padding: 0;
 	border: none;
-	border-top-right-radius: 10px;
-	border-bottom-right-radius: 10px;
 }
 
 .previous {
@@ -71,12 +93,63 @@
 }
 
 .prev-btn {
-	background: lightblue;
+	background: @bg-color;
 	cursor: pointer;
 	width: 100%;
 	height: 100%;
 	padding: 0;
 	border: none;
-	border-top-left-radius: 10px;
-	border-bottom-left-radius: 10px;
+}
+
+//Curved divs for app border
+.top-left-corner {
+	background-color: @bg-color;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 2;	
+	width: 100%;
+	height: 100%;
+	 border-radius: 100px 0 0 0;
+     -moz-border-radius: 100px 0 0 0;
+     -webkit-border-radius: 100px 0 0 0;
+}
+
+.bottom-left-corner {
+	background-color: @bg-color;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 3;
+	grid-row-end: 4;	
+	width: 100%;
+	height: 100%;
+	 border-radius: 0 0 0 100px;
+     -moz-border-radius: 0 0 0 100px;
+     -webkit-border-radius: 0 0 0 100px;
+}
+
+.top-right-corner {
+	background-color: @bg-color;
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;	
+	width: 100%;
+	height: 100%;
+	border-radius: 0 100px 0 0;
+     -moz-border-radius: 0 100px 0 0;
+     -webkit-border-radius: 0 100px 0 0;
+}
+
+.bottom-right-corner {
+	background-color: @bg-color;
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 3;
+	grid-row-end: 4;	
+	width: 100%;
+	height: 100%;
+	border-radius: 0 0 100px 0;
+     -moz-border-radius: 0 0 100px 0;
+     -webkit-border-radius: 0 0 100px 0;
 }

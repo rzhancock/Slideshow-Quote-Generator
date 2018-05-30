@@ -44,38 +44,14 @@ export default class QuoteApp extends Component {
 
         xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
-        
-
         xhr.onload = () => {
-            
-
             this.setState({
                 images: JSON.parse(xhr.responseText),
             }, this.updateURL);
-
-            
-           
         }
 
         xhr.send();
-
     }
-
-   /* componentDidUpdate() {
-        
-
-         
-
-        renderBackground = () =>{
-
-            const { imageIndex, images } = this.state;
-            const location = images[imageIndex].urls.full;
-            background = 'backgroundImage: url(' + location + ')';
-            console.log(background);
-            return background;
-        } 
-
-    } */
 
 
     nextIndex = () => {
@@ -91,7 +67,7 @@ export default class QuoteApp extends Component {
         this.setState({
             quoteIndex: newIndex,
             imageIndex: newImage
-        },this.updateURL);
+        }, this.updateURL);
     }
 
 
@@ -99,17 +75,25 @@ export default class QuoteApp extends Component {
 
     render() {
      
-        
        let styles = {
             background: {
-                background: 'url(' + this.state.URL + ') no-repeat',
+                background: 'url(' + this.state.URL + ') no-repeat #26639d',
             }
         };    
-           
+         
+
         return (
 
-
             <div className="App" >
+
+                <div className="top-left-corner"></div>
+                <div className="bottom-left-corner"></div>
+                <div className="top-right-corner"></div>
+                <div className="bottom-right-corner"></div>
+
+                <div className="top-row"></div>
+                <div className="bottom-row"></div>
+
                 <div className="previous">
                     <button 
                         className="prev-btn"
@@ -120,6 +104,9 @@ export default class QuoteApp extends Component {
 
                     </button>
                 </div>
+
+                <div className="bottom-left-corner"></div>
+
                 <div className="quote-container" style={styles.background}>
                     <div className="quote">
                         {this.renderQuote()}
@@ -128,8 +115,8 @@ export default class QuoteApp extends Component {
                     <div className="author">
                         {this.renderAuthor()}
                     </div>
-
                 </div>
+
                 <div className="next">
                     <button 
                         className="next-btn"
@@ -142,10 +129,7 @@ export default class QuoteApp extends Component {
                 
                 </div>
             </div>
-                
 
-                
-            
         );
 
     }
