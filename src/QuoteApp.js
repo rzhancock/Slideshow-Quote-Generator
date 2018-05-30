@@ -8,10 +8,13 @@ export default class QuoteApp extends Component {
 
         this.state = {
             quotes: favoriteQuotes,
-            quoteIndex: 0,
+            quoteIndex: Math.round(Math.random() * (favoriteQuotes.length - 1)),
+            quoteIndexes: [],
+            authors: [],
             images: {},
             imageIndex: 0,
-            URL: ''
+            imageIndexes:[],
+            URL: '',
 
         }
         
@@ -32,8 +35,20 @@ export default class QuoteApp extends Component {
     }
 
     updateURL = () => {
+        const { quotes, quoteIndex, quoteIndexes, imageIndex, imageIndexes, authors} = this.state;
+
+        let pushQuote = [...quoteIndexes, quoteIndex];
+        let pushImage = [...imageIndexes, imageIndex];
+        let pushAuthors = [...authors, quotes[quoteIndex].author];
+
              this.setState(
-                    { URL: this.state.images[this.state.imageIndex].urls.regular }
+                    { 
+                        URL: this.state.images[this.state.imageIndex].urls.regular,
+                        quoteIndexes: pushQuote,
+                        imageIndexes: pushImage,
+                        authors: pushAuthors
+
+                    }
             ); 
      }
     
@@ -42,7 +57,7 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=25&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=2&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
 
         xhr.onload = () => {
             this.setState({
@@ -91,7 +106,9 @@ export default class QuoteApp extends Component {
                 <div className="top-right-corner"></div>
                 <div className="bottom-right-corner"></div>
 
-                <div className="top-row"></div>
+                <div className="top-row">
+                    <h1> Some quotes to live by: </h1>
+                </div>
                 <div className="bottom-row"></div>
 
                 <div className="previous">
@@ -100,7 +117,8 @@ export default class QuoteApp extends Component {
                         onClick={null}
                     >
                         Prev<br/>
-                        Quote
+                        Quote<br/>
+
 
                     </button>
                 </div>
@@ -123,7 +141,8 @@ export default class QuoteApp extends Component {
                         onClick={this.nextIndex}
                     >
                         Next<br/>
-                        Quote
+                        Quote<br/>
+                        
 
                     </button>
                 
