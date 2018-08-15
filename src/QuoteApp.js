@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './quotes.css';
 import { favoriteQuotes } from './quotes';
 
+
 export default class QuoteApp extends Component {
     constructor(props) {
         super(props);
@@ -12,14 +13,13 @@ export default class QuoteApp extends Component {
             quoteIndexes: [],
             authors: [],
             images: {},
-            imageIndex: 0,
+            imageIndex: Math.round(Math.random() * 30),
             imageIndexes:[],
             URL: '',
-
+            apiImagePage: 'page=1'
         }
         
     }
-
 
 
     renderQuote = () => {
@@ -35,7 +35,7 @@ export default class QuoteApp extends Component {
     }
 
     updateURL = () => {
-        const { quotes, quoteIndex, quoteIndexes, imageIndex, imageIndexes, authors} = this.state;
+        const { quotes, quoteIndex, quoteIndexes, images, imageIndex, imageIndexes, authors} = this.state;
 
         let pushQuote = [...quoteIndexes, quoteIndex];
         let pushImage = [...imageIndexes, imageIndex];
@@ -43,11 +43,10 @@ export default class QuoteApp extends Component {
 
              this.setState(
                     { 
-                        URL: this.state.images[this.state.imageIndex].urls.regular,
+                        URL: images[imageIndex].urls.regular,
                         quoteIndexes: pushQuote,
                         imageIndexes: pushImage,
                         authors: pushAuthors
-
                     }
             ); 
      }
@@ -57,7 +56,9 @@ export default class QuoteApp extends Component {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', 'https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=2&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132');
+        xhr.open('GET', `https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&
+            ${this.state.apiImagePage}
+            &per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
 
         xhr.onload = () => {
             this.setState({
@@ -70,13 +71,13 @@ export default class QuoteApp extends Component {
 
 
     nextIndex = () => {
-        const { quoteIndex, imageIndex, images, quotes } = this.state;
+        const { quoteIndex, imageIndex, images, quotes, quoteIndexes, imageIndexes } = this.state;
         const numberOfQuotes = quotes.length - 1;
         const numberOfImages = images.length - 1;
         const newIndex = Math.round(Math.random() * numberOfQuotes);
         const newImage = Math.round(Math.random() * numberOfImages);
 
-        if (newIndex === quoteIndex || newImage === imageIndex) {
+        if (quoteIndexes.indexOf(newIndex) !== -1 || imageIndexes.indexOf(newImage) !== -1) {
             return this.nextIndex();
         }
         this.setState({
@@ -90,10 +91,8 @@ export default class QuoteApp extends Component {
 
     render() {
      
-       let styles = {
-            background: {
-                background: 'url(' + this.state.URL + ') no-repeat #26639d',
-            }
+       const styles = {
+                transition: 'opacity 1s ease-in'
         };    
          
 
@@ -101,15 +100,14 @@ export default class QuoteApp extends Component {
 
             <div className="App" >
 
-                <div className="top-left-corner"></div>
-                <div className="bottom-left-corner"></div>
-                <div className="top-right-corner"></div>
-                <div className="bottom-right-corner"></div>
-
                 <div className="top-row">
                     <h1> Some quotes to live by: </h1>
+
                 </div>
-                <div className="bottom-row"></div>
+
+                <div className="bottom-row">
+                    <p><a href="https://unsplash.com">Images courtesy of Unsplash.com</a></p> 
+                </div>
 
                 <div className="previous">
                     <button 
@@ -118,14 +116,15 @@ export default class QuoteApp extends Component {
                     >
                         Prev<br/>
                         Quote<br/>
-
-
                     </button>
                 </div>
 
                 <div className="bottom-left-corner"></div>
 
-                <div className="quote-container" style={styles.background}>
+                <div className="quote-container">
+                    <div  className="background">
+                        <img src={this.state.URL} />
+                    </div>
                     <div className="quote">
                         {this.renderQuote()}
                     </div>
@@ -142,11 +141,14 @@ export default class QuoteApp extends Component {
                     >
                         Next<br/>
                         Quote<br/>
-                        
-
                     </button>
-                
                 </div>
+
+                <div className="top-left-corner"></div>
+                <div className="bottom-left-corner"></div>
+                <div className="top-right-corner"></div>
+                <div className="bottom-right-corner"></div>
+
             </div>
 
         );
