@@ -14,7 +14,6 @@
   min-height: 600px;
   text-align: center;
   align-content: center;
-  justify-items: center;
   border: none;
 }
 .background {
@@ -22,6 +21,14 @@
   z-index: -1;
   height: 85%;
   overflow: hidden;
+}
+.background .image1 {
+  position: relative;
+  opacity: 1;
+}
+.background .image2 {
+  position: absolute;
+  opacity: 0;
 }
 .quote {
   font-family: sans-serif;

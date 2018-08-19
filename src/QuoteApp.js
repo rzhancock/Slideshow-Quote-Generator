@@ -14,8 +14,10 @@ export default class QuoteApp extends Component {
             authors: [],
             images: {},
             imageIndex: Math.round(Math.random() * 30),
+            imageIndex2: Math.round(Math.random() * 30 - 1),
             imageIndexes:[],
             URL: '',
+            URL2: '',
             apiImagePage: 'page=1'
         }
         
@@ -35,17 +37,26 @@ export default class QuoteApp extends Component {
     }
 
     updateURL = () => {
-        const { quotes, quoteIndex, quoteIndexes, images, imageIndex, imageIndexes, authors} = this.state;
+        const { 
+            quotes, 
+            quoteIndex, 
+            quoteIndexes, 
+            images, 
+            imageIndex, 
+            imageIndex2, 
+            imageIndexes, 
+            authors } = this.state;
 
-        let pushQuote = [...quoteIndexes, quoteIndex];
-        let pushImage = [...imageIndexes, imageIndex];
-        let pushAuthors = [...authors, quotes[quoteIndex].author];
+        const pushQuote = [...quoteIndexes, quoteIndex];
+        const pushImages = [...imageIndexes, imageIndex, imageIndex2];
+        const pushAuthors = [...authors, quotes[quoteIndex].author];
 
              this.setState(
                     { 
                         URL: images[imageIndex].urls.regular,
+                        URL2: images[imageIndex2].urls.regular,
                         quoteIndexes: pushQuote,
-                        imageIndexes: pushImage,
+                        imageIndexes: pushImages,
                         authors: pushAuthors
                     }
             ); 
@@ -69,31 +80,39 @@ export default class QuoteApp extends Component {
         xhr.send();
     }
 
+    
+
+
 
     nextIndex = () => {
+
         const { quoteIndex, imageIndex, images, quotes, quoteIndexes, imageIndexes } = this.state;
         const numberOfQuotes = quotes.length - 1;
         const numberOfImages = images.length - 1;
         const newIndex = Math.round(Math.random() * numberOfQuotes);
         const newImage = Math.round(Math.random() * numberOfImages);
+        const newImage2 = newImage - 1;
 
-        if (quoteIndexes.indexOf(newIndex) !== -1 || imageIndexes.indexOf(newImage) !== -1) {
+        if (quoteIndexes.indexOf(newIndex) !== -1 || imageIndexes.indexOf(newImage) !== -1 || imageIndexes.indexOf(newImage2) !== -1) {
             return this.nextIndex();
         }
+
         this.setState({
             quoteIndex: newIndex,
-            imageIndex: newImage
+            imageIndex: newImage,
+            imageIndex2: newImage2
         }, this.updateURL);
-    }
+
+}
 
 
 
 
     render() {
      
-       const styles = {
+      /* const styles = {
                 transition: 'opacity 1s ease-in'
-        };    
+        };   */ 
          
 
         return (
@@ -123,7 +142,8 @@ export default class QuoteApp extends Component {
 
                 <div className="quote-container">
                     <div  className="background">
-                        <img src={this.state.URL} />
+                        <img src={this.state.URL} alt="background" className="image1"/>
+                        <img src={this.state.URL2} alt="background image2" className="image2"/>
                     </div>
                     <div className="quote">
                         {this.renderQuote()}
