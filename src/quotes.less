@@ -16,45 +16,40 @@
 	display: grid;
 	grid-column: 2 / span 1;
 	grid-row: 2 / span 1;
-	height: 100%;
-	min-height: 600px;
+	height: 600px;
 	text-align: center;
 	align-content: center;
 	border: none;
+	overflow: hidden;
+	position: relative;
 }
 
 
 .background {
-	position: absolute;
 	z-index: -1;
-	height: 85%;
-	overflow: hidden;
-	.image1 {
-		position: relative;
-		opacity: 1;
-	}
-	.image2 {
-		position: absolute;
-		opacity: 0;
-	}
+	position: absolute;
 }
 
-.quote, {
+
+#quote {
 	font-family: @font;
 	font-size: 1.5em;
 	font-weight: bold;
 	text-shadow: @shadow;
 	padding: 4em;
-	color: white
+	color: white;
+
 }
 
-.author {
+#author {
 	font-family: @font;
 	font-size: 1.75em;
 	text-shadow: @shadow;
 	padding: 2em;
-	color: white
+	color: white;
+
 }
+
 
 
 .top-row {
