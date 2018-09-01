@@ -1,29 +1,27 @@
 import React, { Component } from 'react';
 import './quotes.css';
 import { favoriteQuotes } from './quotes';
-import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 
 export default class QuoteApp extends Component {
     constructor(props) {
         super(props);
-
         
         const startingIndex = Math.round(Math.random() * 30);
-        
 
         this.state = {
             quotes: favoriteQuotes,
             quoteIndex: Math.round(Math.random() * (favoriteQuotes.length - 1)),
             quoteIndexes: [],
             authors: [],
-            images: {},
+            images: [],
             imageIndex: startingIndex,
             imageIndexes:[],
             URL: '',
+            opacity: 0,
             apiImagePage: 'page=1',
             isLoading: false,
-            hasErrored: false
+            hasErrored: false,
         }
         
     }
@@ -43,7 +41,6 @@ export default class QuoteApp extends Component {
 
     fetchData(url) {
         this.setState({ isLoading: true });
-
         fetch(url)
             .then((response) => {
                 if (!response.ok) {
@@ -56,7 +53,6 @@ export default class QuoteApp extends Component {
             })
             .then((response) => response.json())
             .then((images) => this.setState({ images }))
-            .catch(() => this.setState({ hasErrored: true }))
             .then(this.updateURL);
     }
 
@@ -74,14 +70,17 @@ export default class QuoteApp extends Component {
         const pushImages = [...imageIndexes, imageIndex];
         const pushAuthors = [...authors, quotes[quoteIndex].author];
 
-             this.setState(
+        setTimeout(() => {
+          this.setState(
                     { 
                         URL: images[imageIndex].urls.regular,
                         quoteIndexes: pushQuote,
                         imageIndexes: pushImages,
-                        authors: pushAuthors
+                        authors: pushAuthors,
+                        opacity: 1
                     }
-            ); 
+            )
+        }, 1100);
      }
     
 
@@ -94,30 +93,42 @@ export default class QuoteApp extends Component {
     }
 
 
-    nextIndex = () => {
+    nextSlide = () => {
 
-        const { quoteIndex, imageIndex, images, quotes, quoteIndexes, imageIndexes } = this.state;
-        const numberOfQuotes = quotes.length - 1;
+        const { quoteIndex, images, quotes, quoteIndexes, imageIndexes } = this.state;
         const numberOfImages = images.length - 1;
-        const newIndex = Math.round(Math.random() * numberOfQuotes);
-        const newImage = Math.round(Math.random() * numberOfImages);
+        const numberOfQuotes = quotes.length - 1;
 
+        const nextImage = Math.round(Math.random() * numberOfImages);
+        const nextQuote = Math.round(Math.random() * numberOfQuotes)
 
-
-        if (quoteIndexes.indexOf(newIndex) !== -1 || imageIndexes.indexOf(newImage) !== -1) {
-            return this.nextIndex();
+        if (imageIndexes.indexOf(nextImage) !== -1 || quoteIndexes.indexOf(nextQuote) !== -1) {
+            return this.nextSlide();
         }
 
+        
+        this.setState({
+                imageIndex: nextImage,
+                opacity: 0
+        }, this.updateURL);
 
-          this.setState({
-                quoteIndex: newIndex,
-                imageIndex: newImage,
-            }, this.updateURL);  
+        setTimeout(() => {
+          this.setState({ quoteIndex: nextQuote });
+        }, 1000);
+         
+
+        
+          
 
     }
 
     render() {
          
+        const styles = {
+            transition: 'opacity 1s linear',
+            opacity: this.state.opacity
+            
+        }
 
         return (
 
@@ -144,23 +155,26 @@ export default class QuoteApp extends Component {
 
                 <div className="bottom-left-corner"></div>
 
-                <div className="quote-container">
-                     <div id="quote" >
+                <div className="quote-container" style={{...styles}}>
+
+                    <div id="quote" >
                         {this.renderQuote()}
                     </div>
 
                     <div id="author" >
                         {this.renderAuthor()}
                     </div>
-                    <div className="background">
-                            <img src={this.state.URL} key={this.state.imageIndex} alt="" id="image1" />
+                    
+                    <div className="background" >
+                        <img src={this.state.URL} key={this.state.imageIndex} alt="" id="image1" />
                     </div>
+
                 </div>
 
                 <div className="next">
                     <button 
                         className="next-btn"
-                        onClick={this.nextIndex}
+                        onClick={this.nextSlide}
                     >
                         Next<br/>
                         Quote<br/>
