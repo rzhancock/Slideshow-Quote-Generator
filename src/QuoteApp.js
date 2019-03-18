@@ -6,126 +6,128 @@ import { favoriteQuotes } from './quotes';
 export default class QuoteApp extends Component {
     constructor(props) {
         super(props);
-        
-        const startingIndex = Math.round(Math.random() * 30);
 
+        // Fisher-Yates shuffle algorithm - http://stackoverflow.com/questions/962802#962890
+        function shuffle(array) {
+            var tmp, current, top = array.length;
+            if(top) while(--top) {
+            current = Math.floor(Math.random() * (top + 1));
+            tmp = array[current];
+            array[current] = array[top];
+            array[top] = tmp;
+            }
+            return array;
+        }
+        
+        let randomImageIndexes = [];
+        for (let i = 0; i < 30; i++){
+            randomImageIndexes[i] = i;
+        }
+        randomImageIndexes = shuffle(randomImageIndexes);
+
+        let randomQuoteIndexes = []
+        for (let i = 0; i < favoriteQuotes.length; i++){
+            randomQuoteIndexes[i] = i;
+        }
+        randomQuoteIndexes = shuffle(randomQuoteIndexes);
+        
+        const indexesCombined = [];
+        for (let i = 0; i < randomImageIndexes.length; i++) {
+            indexesCombined.push([randomImageIndexes[i], randomQuoteIndexes[i]]);
+        }
+        
         this.state = {
             quotes: favoriteQuotes,
-            quoteIndex: Math.round(Math.random() * (favoriteQuotes.length - 1)),
-            quoteIndexes: [],
-            authors: [],
+            index: 0,
+            indexes: indexesCombined,
             images: [],
-            imageIndex: startingIndex,
-            imageIndexes:[],
             URL: '',
             opacity: 0,
             apiImagePage: 'page=1',
-            isLoading: false,
-            hasErrored: false,
         }
         
     }
-
-
-    renderQuote = () => {
-        const { quoteIndex, quotes } = this.state;
-        
-        return quotes[quoteIndex].text;
-    };
-
-    renderAuthor = () => {
-        const { quoteIndex, quotes } = this.state;
-               
-        return quotes[quoteIndex].author;
-    }
-
-    fetchData(url) {
-        this.setState({ isLoading: true });
-        fetch(url)
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-
-                this.setState({ isLoading: false });
-
-                return response;
-            })
-            .then((response) => response.json())
-            .then((images) => this.setState({ images }))
-            .then(this.updateURL);
-    }
-
-    updateURL = () => {
-        const { 
-            quotes, 
-            quoteIndex, 
-            quoteIndexes, 
-            images, 
-            imageIndex,
-            imageIndexes, 
-            authors } = this.state;
-
-        const pushQuote = [...quoteIndexes, quoteIndex];
-        const pushImages = [...imageIndexes, imageIndex];
-        const pushAuthors = [...authors, quotes[quoteIndex].author];
-
-        setTimeout(() => {
-          this.setState(
-                    { 
-                        URL: images[imageIndex].urls.regular,
-                        quoteIndexes: pushQuote,
-                        imageIndexes: pushImages,
-                        authors: pushAuthors,
-                        opacity: 1
-                    }
-            )
-        }, 1100);
-     }
-    
 
     componentDidMount(){
         this.fetchData(`https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&
             ${this.state.apiImagePage}
             &per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
+ 
+    }
 
+
+    renderQuote = (index) => {
+        const { quotes, indexes } = this.state;
+        return quotes[indexes[index][1]].text;
+    };
+
+    renderAuthor = (index) => {
+        const { quotes, indexes } = this.state;
+               
+        return quotes[indexes[index][1]].author;
+    }
+
+    
+
+     fetchData(url) {
+
+        const { images } = this.state;
+
+
+        fetch(url)
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response;
+            })
+            //Format response to json and add to state under images.
+            .then((response) => response.json())
+            .then((images) => this.setState({ images }))
+            .then(() => {
+                const { images, indexes, index } = this.state;
+                this.setState({ 
+                    URL: images[indexes[index][0]].urls.regular,
+                    opacity: 1,
+                    index: index + 1
+                })
+            })
+            // Preload Images
+            .then(() => {
+                for (let i = 0; i < images.length; i++) {
+                const loaded = new Image();
+                loaded.src = images[i].urls.regular;
+            }
+        });
+    }
+
+    
+
+    updateURL = () => {
+        const { images, indexes, index } = this.state;
+
+            this.setState({ 
+                URL: images[indexes[index][0]].urls.regular,
+                opacity: 1,
+                index: index + 1
+        })
         
     }
+
+    
 
 
     nextSlide = () => {
-
-        const { quoteIndex, images, quotes, quoteIndexes, imageIndexes } = this.state;
-        const numberOfImages = images.length - 1;
-        const numberOfQuotes = quotes.length - 1;
-
-        const nextImage = Math.round(Math.random() * numberOfImages);
-        const nextQuote = Math.round(Math.random() * numberOfQuotes)
-
-        if (imageIndexes.indexOf(nextImage) !== -1 || quoteIndexes.indexOf(nextQuote) !== -1) {
-            return this.nextSlide();
-        }
-
-        
         this.setState({
-                imageIndex: nextImage,
-                opacity: 0
-        }, this.updateURL);
-
-        setTimeout(() => {
-          this.setState({ quoteIndex: nextQuote });
-        }, 1000);
-         
-
-        
-          
-
+            opacity: 0
+        });
     }
 
+    //RENDER
     render() {
          
         const styles = {
-            transition: 'opacity 1s linear',
+            transition: 'opacity .5s ease-in-out',
             opacity: this.state.opacity
             
         }
@@ -155,18 +157,18 @@ export default class QuoteApp extends Component {
 
                 <div className="bottom-left-corner"></div>
 
-                <div className="quote-container" style={{...styles}}>
+                <div className="quote-container" style={{...styles}} onTransitionEnd={this.updateURL}>
 
                     <div id="quote" >
-                        {this.renderQuote()}
+                        {this.renderQuote(this.state.index)}
                     </div>
 
                     <div id="author" >
-                        {this.renderAuthor()}
+                        {this.renderAuthor(this.state.index)}
                     </div>
                     
                     <div className="background" >
-                        <img src={this.state.URL} key={this.state.imageIndex} alt="" id="image1" />
+                        <img src={this.state.URL} key={this.state.indexes} alt="" id="image1" />
                     </div>
 
                 </div>
@@ -175,6 +177,7 @@ export default class QuoteApp extends Component {
                     <button 
                         className="next-btn"
                         onClick={this.nextSlide}
+                        
                     >
                         Next<br/>
                         Quote<br/>

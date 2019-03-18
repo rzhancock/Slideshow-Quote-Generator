@@ -16,7 +16,6 @@
   border: none;
   overflow: hidden;
   position: relative;
-  transition: opacity 1s ease-in-out;
 }
 .background {
   z-index: -1;
