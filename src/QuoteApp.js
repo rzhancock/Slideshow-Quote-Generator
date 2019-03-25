@@ -35,6 +35,8 @@ export default class QuoteApp extends Component {
         for (let i = 0; i < randomImageIndexes.length; i++) {
             indexesCombined.push([randomImageIndexes[i], randomQuoteIndexes[i]]);
         }
+
+        //STATE
         
         this.state = {
             quotes: favoriteQuotes,
@@ -43,27 +45,34 @@ export default class QuoteApp extends Component {
             images: [],
             URL: '',
             opacity: 0,
-            apiImagePage: 'page=1',
+            nextBtnDisabled: false,
+            backBtnDisabled: true
         }
+
+        ///////
         
     }
 
     componentDidMount(){
-        this.fetchData(`https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&
-            ${this.state.apiImagePage}
-            &per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
- 
+        this.fetchData(`https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
+        
     }
 
 
+
+    renderBackground = () => {
+        return <img src={this.state.URL} key={this.state.index} alt="" id="image1" />
+    }
+
     renderQuote = (index) => {
         const { quotes, indexes } = this.state;
+        
         return quotes[indexes[index][1]].text;
     };
 
     renderAuthor = (index) => {
         const { quotes, indexes } = this.state;
-               
+        
         return quotes[indexes[index][1]].author;
     }
 
@@ -72,8 +81,7 @@ export default class QuoteApp extends Component {
      fetchData(url) {
 
         const { images } = this.state;
-
-
+        
         fetch(url)
             .then((response) => {
                 if (!response.ok) {
@@ -81,44 +89,96 @@ export default class QuoteApp extends Component {
                 }
                 return response;
             })
-            //Format response to json and add to state under images.
             .then((response) => response.json())
             .then((images) => this.setState({ images }))
-            .then(() => {
-                const { images, indexes, index } = this.state;
-                this.setState({ 
-                    URL: images[indexes[index][0]].urls.regular,
-                    opacity: 1,
-                    index: index + 1
-                })
-            })
-            // Preload Images
             .then(() => {
                 for (let i = 0; i < images.length; i++) {
                 const loaded = new Image();
                 loaded.src = images[i].urls.regular;
-            }
-        });
+                }
+            })
+            .then(() => {
+                const { images, indexes, index } = this.state;
+                this.setState({ 
+                    URL: images[indexes[0][0]].urls.regular,
+                    opacity: 1,
+                    backBtnDisabled: true
+                })
+            })
+            .then( () => {
+                this.setState({
+                    index: 1
+                })
+            })
     }
 
+   // Why is image state not behaving as expected???
     
 
-    updateURL = () => {
-        const { images, indexes, index } = this.state;
 
-            this.setState({ 
-                URL: images[indexes[index][0]].urls.regular,
-                opacity: 1,
-                index: index + 1
-        })
+    handleTransitionEnd = () => {
+        const { images, indexes, index, opacity, whichBtn } = this.state;
+
+        switch (true) {
+            case opacity === 0 && whichBtn === 'next' && index === images.length - 2:
+                this.fetchData(`https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=2&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
+                   
+                break;
+                    
+            case opacity === 0 && whichBtn === 'next':
+                    this.setState({
+                        URL: images[indexes[index + 1][0]].urls.regular,
+                        opacity: 1,
+                        index: index + 1
+                    })
+                
+                break;
+                //// Fix This
+            case opacity === 0 && whichBtn === 'back':
+                if (index === 1) {
+                    this.setState({
+                        URL: images[indexes[0][0]].urls.regular,
+                        opacity: 1,
+                        index: 0
+                    }) 
+                } else {
+                    this.setState({
+                        URL: images[indexes[index - 1][0]].urls.regular,
+                        opacity: 1,
+                        index: index - 1
+                    })
+                }
+                break;
+
+            case index === 0:
+                this.setState({
+                    nextBtnDisabled: false,
+                    backBtnDisabled: true
+                })
+                break;                
         
+            default:
+                this.setState({
+                    nextBtnDisabled: false,
+                    backBtnDisabled: false
+                })
+                break;
+        }
+
     }
-
-    
-
 
     nextSlide = () => {
         this.setState({
+            nextBtnDisabled: true,
+            whichBtn: 'next',
+            opacity: 0
+        });
+    }
+
+    prevSlide = () => {
+        this.setState({
+            backBtnDisabled: true,
+            whichBtn: 'back',
             opacity: 0
         });
     }
@@ -148,7 +208,8 @@ export default class QuoteApp extends Component {
                 <div className="previous">
                     <button 
                         className="prev-btn"
-                        onClick={null}
+                        onClick={this.prevSlide}
+                        disabled={this.state.backBtnDisabled}
                     >
                         Prev<br/>
                         Quote<br/>
@@ -157,7 +218,10 @@ export default class QuoteApp extends Component {
 
                 <div className="bottom-left-corner"></div>
 
-                <div className="quote-container" style={{...styles}} onTransitionEnd={this.updateURL}>
+                <div className="quote-container" 
+                    style={{...styles}} 
+                    onTransitionEnd={this.handleTransitionEnd}
+                >
 
                     <div id="quote" >
                         {this.renderQuote(this.state.index)}
@@ -168,7 +232,8 @@ export default class QuoteApp extends Component {
                     </div>
                     
                     <div className="background" >
-                        <img src={this.state.URL} key={this.state.indexes} alt="" id="image1" />
+                        {this.renderBackground(this.state.index)}
+                        
                     </div>
 
                 </div>
@@ -177,7 +242,7 @@ export default class QuoteApp extends Component {
                     <button 
                         className="next-btn"
                         onClick={this.nextSlide}
-                        
+                        disabled={this.state.nextBtnDisabled}
                     >
                         Next<br/>
                         Quote<br/>
