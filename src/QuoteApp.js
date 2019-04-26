@@ -1,262 +1,230 @@
-import React, { Component } from 'react';
-import './quotes.css';
-import { favoriteQuotes } from './quotes';
-
+import React, { Component } from "react";
+import "./quotes.css";
+import { favoriteQuotes } from "./quotes";
 
 export default class QuoteApp extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        // Fisher-Yates shuffle algorithm - http://stackoverflow.com/questions/962802#962890
-        function shuffle(array) {
-            var tmp, current, top = array.length;
-            if(top) while(--top) {
-            current = Math.floor(Math.random() * (top + 1));
-            tmp = array[current];
-            array[current] = array[top];
-            array[top] = tmp;
-            }
-            return array;
+    // Fisher-Yates shuffle algorithm - http://stackoverflow.com/questions/962802#962890
+    function shuffle(array) {
+      var tmp,
+        current,
+        top = array.length;
+      if (top)
+        while (--top) {
+          current = Math.floor(Math.random() * (top + 1));
+          tmp = array[current];
+          array[current] = array[top];
+          array[top] = tmp;
         }
-        
-        let randomImageIndexes = [];
-        for (let i = 0; i < 30; i++){
-            randomImageIndexes[i] = i;
-        }
-        randomImageIndexes = shuffle(randomImageIndexes);
+      return array;
+    }
+    let randomImageIndexes = [];
+    for (let i = 0; i < 30; i++) {
+      randomImageIndexes[i] = i;
+    }
+    randomImageIndexes = shuffle(randomImageIndexes);
 
-        let randomQuoteIndexes = []
-        for (let i = 0; i < favoriteQuotes.length; i++){
-            randomQuoteIndexes[i] = i;
-        }
-        randomQuoteIndexes = shuffle(randomQuoteIndexes);
-        
-        const indexesCombined = [];
-        for (let i = 0; i < randomImageIndexes.length; i++) {
-            indexesCombined.push([randomImageIndexes[i], randomQuoteIndexes[i]]);
-        }
+    let randomQuoteIndexes = [];
+    for (let i = 0; i < favoriteQuotes.length; i++) {
+      randomQuoteIndexes[i] = i;
+    }
+    randomQuoteIndexes = shuffle(randomQuoteIndexes);
 
-        //STATE
-        
-        this.state = {
-            quotes: favoriteQuotes,
-            index: 0,
-            indexes: indexesCombined,
-            images: [],
-            URL: '',
-            opacity: 0,
-            nextBtnDisabled: false,
-            backBtnDisabled: true
-        }
-
-        ///////
-        
+    const indexesCombined = [];
+    for (let i = 0; i < randomImageIndexes.length; i++) {
+      indexesCombined.push([randomImageIndexes[i], randomQuoteIndexes[i]]);
     }
 
-    componentDidMount(){
-        this.fetchData(`https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
-        
-    }
+    //STATE
 
-
-
-    renderBackground = () => {
-        return <img src={this.state.URL} key={this.state.index} alt="" id="image1" />
-    }
-
-    renderQuote = (index) => {
-        const { quotes, indexes } = this.state;
-        
-        return quotes[indexes[index][1]].text;
+    this.state = {
+      quotes: favoriteQuotes,
+      index: 0,
+      indexes: indexesCombined,
+      images: [],
+      URL: "",
+      opacity: 0,
+      nextBtnDisabled: false,
+      backBtnDisabled: true
     };
 
-    renderAuthor = (index) => {
-        const { quotes, indexes } = this.state;
-        
-        return quotes[indexes[index][1]].author;
-    }
+    ///////
+  }
 
-    
+  componentDidMount() {
+    this.fetchData(
+      `https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`
+    );
+  }
 
-     fetchData(url) {
+  renderBackground = () => {
+    return (
+      <img src={this.state.URL} key={this.state.index} alt="" id="image1" />
+    );
+  };
 
-        const { images } = this.state;
-        
-        fetch(url)
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response;
-            })
-            .then((response) => response.json())
-            .then((images) => this.setState({ images }))
-            .then(() => {
-                for (let i = 0; i < images.length; i++) {
-                const loaded = new Image();
-                loaded.src = images[i].urls.regular;
-                }
-            })
-            .then(() => {
-                const { images, indexes, index } = this.state;
-                this.setState({ 
-                    URL: images[indexes[0][0]].urls.regular,
-                    opacity: 1,
-                    backBtnDisabled: true
-                })
-            })
-            .then( () => {
-                this.setState({
-                    index: 1
-                })
-            })
-    }
+  renderQuote = index => {
+    const { quotes, indexes } = this.state;
 
-   // Why is image state not behaving as expected???
-    
+    return quotes[indexes[index][1]].text;
+  };
 
+  renderAuthor = index => {
+    const { quotes, indexes } = this.state;
 
-    handleTransitionEnd = () => {
-        const { images, indexes, index, opacity, whichBtn } = this.state;
+    return quotes[indexes[index][1]].author;
+  };
 
-        switch (true) {
-            case opacity === 0 && whichBtn === 'next' && index === images.length - 2:
-                this.fetchData(`https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=2&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`);
-                   
-                break;
-                    
-            case opacity === 0 && whichBtn === 'next':
-                    this.setState({
-                        URL: images[indexes[index + 1][0]].urls.regular,
-                        opacity: 1,
-                        index: index + 1
-                    })
-                
-                break;
-                //// Fix This
-            case opacity === 0 && whichBtn === 'back':
-                if (index === 1) {
-                    this.setState({
-                        URL: images[indexes[0][0]].urls.regular,
-                        opacity: 1,
-                        index: 0
-                    }) 
-                } else {
-                    this.setState({
-                        URL: images[indexes[index - 1][0]].urls.regular,
-                        opacity: 1,
-                        index: index - 1
-                    })
-                }
-                break;
+  fetchData(url) {
+    const { images } = this.state;
 
-            case index === 0:
-                this.setState({
-                    nextBtnDisabled: false,
-                    backBtnDisabled: true
-                })
-                break;                
-        
-            default:
-                this.setState({
-                    nextBtnDisabled: false,
-                    backBtnDisabled: false
-                })
-                break;
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
         }
-
-    }
-
-    nextSlide = () => {
-        this.setState({
-            nextBtnDisabled: true,
-            whichBtn: 'next',
-            opacity: 0
-        });
-    }
-
-    prevSlide = () => {
-        this.setState({
-            backBtnDisabled: true,
-            whichBtn: 'back',
-            opacity: 0
-        });
-    }
-
-    //RENDER
-    render() {
-         
-        const styles = {
-            transition: 'opacity .5s ease-in-out',
-            opacity: this.state.opacity
-            
+        return response;
+      })
+      .then(response => response.json())
+      .then(images => this.setState({ images }))
+      .then(() => {
+        for (let i = 0; i < images.length; i++) {
+          const loaded = new Image();
+          loaded.src = images[i].urls.regular;
         }
+      })
+      .then(() => {
+        const { images, indexes } = this.state;
+        this.setState({
+          URL: images[indexes[0][0]].urls.regular,
+          opacity: 1,
+          backBtnDisabled: true
+        });
+      });
+    // .then( () => {
+    //     this.setState({
+    //         index: 1
+    //     })
+    // })
+  }
 
-        return (
+  handleTransitionEnd = () => {
+    const { images, indexes, index, opacity, whichBtn } = this.state;
 
-            <div className="App" >
+    switch (true) {
+      case opacity === 0 && whichBtn === "next":
+        console.log("0 Next");
+        this.setState({
+          nextBtnDisabled: true,
+          URL: images[indexes[index + 1][0]].urls.regular,
+          opacity: 1,
+          index: index + 1
+        });
 
-                <div className="top-row">
-                    <h1> Some quotes to live by: </h1>
+        break;
+      case opacity === 0 && whichBtn === "back":
+        console.log("0 Back");
+        if (index === 1) {
+          console.log("0 Back IF");
+          this.setState({
+            URL: images[indexes[0][0]].urls.regular,
+            opacity: 1,
+            index: 0
+          });
+        } else {
+          console.log("0 Back Else");
+          this.setState({
+            URL: images[indexes[index - 1][0]].urls.regular,
+            opacity: 1,
+            index: index - 1
+          });
+        }
+        break;
 
-                </div>
+      case index === 0:
+        console.log("index === 0");
+        this.setState({
+          nextBtnDisabled: false,
+          backBtnDisabled: true
+        });
+        break;
 
-                <div className="bottom-row">
-                    <p><a href="https://unsplash.com">Images courtesy of Unsplash.com</a></p> 
-                </div>
+      default:
+        console.log("default");
+        this.setState({
+          nextBtnDisabled: false,
+          backBtnDisabled: false
+        });
+        break;
+    }
+  };
 
-                <div className="previous">
-                    <button 
-                        className="prev-btn"
-                        onClick={this.prevSlide}
-                        disabled={this.state.backBtnDisabled}
-                    >
-                        Prev<br/>
-                        Quote<br/>
-                    </button>
-                </div>
+  nextSlide = () => {
+    this.setState({
+      nextBtnDisabled: true,
+      whichBtn: "next",
+      opacity: 0
+    });
+  };
 
-                <div className="bottom-left-corner"></div>
+  prevSlide = () => {
+    this.setState({
+      backBtnDisabled: true,
+      whichBtn: "back",
+      opacity: 0
+    });
+  };
 
-                <div className="quote-container" 
-                    style={{...styles}} 
-                    onTransitionEnd={this.handleTransitionEnd}
-                >
+  //RENDER
+  render() {
+    const styles = {
+      transition: "opacity .75s ease-in",
+      opacity: this.state.opacity
+    };
 
-                    <div id="quote" >
-                        {this.renderQuote(this.state.index)}
-                    </div>
+    return (
+      <div className="App" style={{ backgroundColor: "#dbdbdb" }}>
+        <div
+          className="quote-container"
+          onTransitionEnd={this.handleTransitionEnd}
+        >
+          <div id="quote" style={{ ...styles }}>
+            {this.renderQuote(this.state.index)}
+          </div>
 
-                    <div id="author" >
-                        {this.renderAuthor(this.state.index)}
-                    </div>
-                    
-                    <div className="background" >
-                        {this.renderBackground(this.state.index)}
-                        
-                    </div>
+          <div id="author" style={{ ...styles }}>
+            {this.renderAuthor(this.state.index)}
+          </div>
 
-                </div>
+          <div className="background" style={{ ...styles }}>
+            {this.renderBackground()}
+          </div>
 
-                <div className="next">
-                    <button 
-                        className="next-btn"
-                        onClick={this.nextSlide}
-                        disabled={this.state.nextBtnDisabled}
-                    >
-                        Next<br/>
-                        Quote<br/>
-                    </button>
-                </div>
-
-                <div className="top-left-corner"></div>
-                <div className="bottom-left-corner"></div>
-                <div className="top-right-corner"></div>
-                <div className="bottom-right-corner"></div>
-
+          <div className="buttons">
+            <div className="previous">
+              <button
+                className="prev-btn"
+                onClick={this.prevSlide}
+                disabled={this.state.backBtnDisabled}
+              >
+                &#8249;
+              </button>
             </div>
 
-        );
-
-    }
+            <div className="next">
+              <button
+                className="next-btn"
+                onClick={this.nextSlide}
+                disabled={this.state.nextBtnDisabled}
+              >
+                &#8250;
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
