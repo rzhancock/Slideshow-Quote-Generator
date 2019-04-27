@@ -2,15 +2,17 @@
   padding: 0;
   max-width: 1080px;
   margin: 0 auto;
+  display: flex;
 }
 .quote-container {
   position: relative;
+  height: 600px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-content: space-around;
-  height: 600px;
   text-align: center;
   border: none;
   overflow: hidden;
@@ -30,9 +32,10 @@
 }
 
 #quote {
+  display: block;
   padding: 0 6.5rem;
   font-family: sans-serif;
-  font-size: 1.5em;
+  font-size: 28px;
   font-weight: bold;
   text-shadow: 0 0 8px #000;
   color: white;
@@ -40,8 +43,10 @@
   position: relative;
 }
 #author {
+  display: block;
+  align-self: center;
   font-family: sans-serif;
-  font-size: 1.75em;
+  font-size: 32px;
   text-shadow: 0 0 8px #000;
   color: white;
   z-index: 2;
@@ -49,8 +54,10 @@
 }
 
 .buttons {
+  max-width: 1080px;
   display: flex;
   justify-content: space-between;
+  align-self: center;
   width: 100%;
   z-index: 2;
   position: absolute;
@@ -68,15 +75,15 @@
   padding: 0;
   border: none;
   font-size: 100px;
-  background: rgba(255, 255, 255, 0.5);
-  color: rgba(47, 47, 47, 0.7);
+  background: rgb(174, 174, 174);
+  color: rgba(255, 255, 255, 0.7);
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
 
 .next-btn:hover {
-  background: rgba(255, 255, 255, 0.6);
-  color: rgba(76, 76, 76, 0.8);
+  background: rgb(187, 187, 187);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .previous {
@@ -89,13 +96,13 @@
   padding: 0;
   border: none;
   font-size: 100px;
-  background: rgba(255, 255, 255, 0.5);
-  color: rgba(47, 47, 47, 0.7);
+  background: rgb(174, 174, 174);
+  color: rgba(255, 255, 255, 0.7);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
 .prev-btn:hover {
-  background: rgba(255, 255, 255, 0.6);
-  color: rgba(76, 76, 76, 0.8);
+  background: rgb(187, 187, 187);
+  color: rgba(255, 255, 255, 0.8);
 }
