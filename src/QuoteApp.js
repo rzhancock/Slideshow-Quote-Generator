@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./quotes.css";
 import { favoriteQuotes } from "./quotes";
 
+//Images provided by Unsplash.com
+
 export default class QuoteApp extends Component {
   constructor(props) {
     super(props);
@@ -45,6 +47,8 @@ export default class QuoteApp extends Component {
       indexes: indexesCombined,
       images: [],
       URL: "",
+      name: "",
+      username: "",
       opacity: 0,
       nextBtnDisabled: false,
       backBtnDisabled: true
@@ -54,8 +58,8 @@ export default class QuoteApp extends Component {
   }
 
   resetIndexes = () => {
-     // Fisher-Yates shuffle algorithm - http://stackoverflow.com/questions/962802#962890
-     function shuffle(array) {
+    // Fisher-Yates shuffle algorithm - http://stackoverflow.com/questions/962802#962890
+    function shuffle(array) {
       var tmp,
         current,
         top = array.length;
@@ -89,13 +93,13 @@ export default class QuoteApp extends Component {
       quotes: favoriteQuotes,
       index: 0,
       indexes: indexesCombined,
-      images: [],
+      images: []
     });
 
     this.fetchData(
-      `https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=2&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`
-    )
-  }
+      `https://api.unsplash.com/collections/2157113/photos?fit=crop&w=1000&h=600&page=2&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`
+    );
+  };
 
   fetchData(url) {
     const { images } = this.state;
@@ -120,19 +124,16 @@ export default class QuoteApp extends Component {
         this.setState({
           URL: images[indexes[0][0]].urls.regular,
           opacity: 1,
-          backBtnDisabled: true
-        });
-      })
-      .then(() => {
-        this.setState({
-          index: 0
+          backBtnDisabled: true,
+          name: images[indexes[0][0]].user.name,
+          username: images[indexes[0][0]].user.username
         });
       });
   }
 
   componentDidMount() {
     this.fetchData(
-      `https://api.unsplash.com/collections/2157113/photos?fit=crop&w=900&h=600&page=1&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`
+      `https://api.unsplash.com/collections/2157113/photos?page=1&per_page=30&client_id=d78aa27606ff8868b76ac8d0cb6f4ea3c4010b12735789c34ee4bb0f98b4e132`
     );
   }
 
@@ -154,19 +155,18 @@ export default class QuoteApp extends Component {
     return quotes[indexes[index][1]].author;
   };
 
-  handleTransitionEnd = e => {
+  handleTransitionEnd = () => {
     const { images, indexes, index, opacity, whichBtn } = this.state;
 
     switch (true) {
       case opacity === 0 && index === 28 && whichBtn === "next":
-        this.setState(
-          {
-            opacity: 0
-          });
+        this.setState({
+          opacity: 0
+        });
 
         setTimeout(() => {
-          this.resetIndexes()
-        }, 740);
+          this.resetIndexes();
+        }, 450);
 
         break;
 
@@ -175,7 +175,9 @@ export default class QuoteApp extends Component {
           nextBtnDisabled: true,
           URL: images[indexes[index + 1][0]].urls.regular,
           opacity: 1,
-          index: index + 1
+          index: index + 1,
+          name: images[indexes[index + 1][0]].user.name,
+          username: images[indexes[index + 1][0]].user.username
         });
 
         break;
@@ -184,13 +186,17 @@ export default class QuoteApp extends Component {
           this.setState({
             URL: images[indexes[0][0]].urls.regular,
             opacity: 1,
-            index: 0
+            index: 0,
+            name: images[indexes[index + 1][0]].user.name,
+            username: images[indexes[index + 1][0]].user.username
           });
         } else {
           this.setState({
             URL: images[indexes[index - 1][0]].urls.regular,
             opacity: 1,
-            index: index - 1
+            index: index - 1,
+            name: images[indexes[index + 1][0]].user.name,
+            username: images[indexes[index + 1][0]].user.username
           });
         }
         break;
@@ -267,6 +273,22 @@ export default class QuoteApp extends Component {
           <div id="author">{this.renderAuthor(this.state.index)}</div>
 
           <div className="background">{this.renderBackground()}</div>
+
+          <div className="photographer">
+            <i>
+              <p>Photo by </p>
+              <a href={`https://unsplash.com/@${this.state.username}`}>
+                {this.state.name}
+              </a>
+              <p>
+                {" "}
+                on{" "}
+                <a href="https://unsplash.com" className="unsplash">
+                  Unsplash
+                </a>
+              </p>
+            </i>
+          </div>
         </div>
       </div>
     );
