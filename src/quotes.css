@@ -94,8 +94,8 @@
 }
 
 .buttons {
-  max-width: 1050px;
-  width: 96.5%;
+  max-width: 1080px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-self: center;
