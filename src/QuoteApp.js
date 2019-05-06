@@ -241,53 +241,63 @@ export default class QuoteApp extends Component {
     };
 
     return (
-      <div className="App" style={{ backgroundColor: "#dbdbdb" }}>
-        <div className="buttons">
-          <div className="previous">
-            <button
-              className="prev-btn"
-              onClick={this.prevSlide}
-              disabled={this.state.backBtnDisabled}
-            >
-              &#8249;
-            </button>
+      <div className="outer-div">
+        <h4 className="quotes-title">Slideshow Quote Generator</h4>
+        <p className="quotes-description">
+          Created using React and Flexbox, this project features a personal
+          curation of inspirational aphorisms from some of my favorite authors
+          and philosophers overlayed on beautiful images of nature and space
+          provided by Unpslash, a community-driven image repository, using their
+          free API.
+        </p>
+        <div className="wrapper" style={{ backgroundColor: "#dbdbdb" }}>
+          <div className="buttons">
+            <div className="previous">
+              <button
+                className="prev-btn"
+                onClick={this.prevSlide}
+                disabled={this.state.backBtnDisabled}
+              >
+                &#10092;
+              </button>
+            </div>
+
+            <div className="next">
+              <button
+                className="next-btn"
+                onClick={this.nextSlide}
+                disabled={this.state.nextBtnDisabled}
+              >
+                &#10093;
+              </button>
+            </div>
           </div>
+          <div
+            className="quote-container"
+            style={{ ...styles }}
+            onTransitionEnd={this.handleTransitionEnd}
+          >
+            <div id="quote">{this.renderQuote(this.state.index)}</div>
 
-          <div className="next">
-            <button
-              className="next-btn"
-              onClick={this.nextSlide}
-              disabled={this.state.nextBtnDisabled}
-            >
-              &#8250;
-            </button>
-          </div>
-        </div>
-        <div
-          className="quote-container"
-          style={{ ...styles }}
-          onTransitionEnd={this.handleTransitionEnd}
-        >
-          <div id="quote">{this.renderQuote(this.state.index)}</div>
+            <div id="author">{this.renderAuthor(this.state.index)}</div>
 
-          <div id="author">{this.renderAuthor(this.state.index)}</div>
+            <div className="background">{this.renderBackground()}</div>
 
-          <div className="background">{this.renderBackground()}</div>
-
-          <div className="photographer">
-            <i>
-              <p>Photo by </p>
-              <a href={`https://unsplash.com/@${this.state.username}`}>
-                {this.state.name}
-              </a>
-              <p>
-                {" "}
-                on{" "}
-                <a href="https://unsplash.com" className="unsplash">
-                  Unsplash
+            <div className="photographer">
+              <i>
+                <p>Photo by </p>
+                <a href={`https://unsplash.com/@${this.state.username}`}>
+                  {this.state.name}
                 </a>
-              </p>
-            </i>
+                <p>
+                  {" "}
+                  on{" "}
+                  <a href="https://unsplash.com" className="unsplash">
+                    Unsplash
+                  </a>
+                </p>
+              </i>
+            </div>
           </div>
         </div>
       </div>
